@@ -1,43 +1,14 @@
-Welcome to the AWS CodeStar sample web service
+Welcome to LDA code model
 ==============================================
 
-This sample code helps get you started with a simple Python web service using
-AWS Lambda and Amazon API Gateway.
-
+This code contains the LDA model and other helper functions that can be used readily for data pre processing.
 What's Here
 -----------
 
 This sample includes:
 
 * README.md - this file
-* buildspec.yml - this file is used by AWS CodeBuild to package your
-  application for deployment to AWS Lambda
-* index.py - this file contains the sample Python code for the web service
-* template.yml - this file contains the AWS Serverless Application Model (AWS SAM) used
-  by AWS CloudFormation to deploy your application to AWS Lambda and Amazon API
-  Gateway.
-
-
-What Do I Do Next?
-------------------
-
-If you have checked out a local copy of your repository you can start making changes
-to the sample code.  We suggest making a small change to index.py first, so you can
-see how changes pushed to your project's repository are automatically picked up by your
-project pipeline and deployed to AWS Lambda and Amazon API Gateway. (You can watch the pipeline
-progress on your AWS CodeStar project dashboard.)Once you've seen how that works,
-start developing your own code, and have fun!
-
-Learn more about AWS Serverless Application Model (AWS SAM) and how it works here:
-https://github.com/awslabs/serverless-application-model/blob/master/HOWTO.md
-
-AWS Lambda Developer Guide:
-http://docs.aws.amazon.com/lambda/latest/dg/deploying-lambda-apps.html
-
-Learn more about AWS CodeStar by reading the user guide, and post questions and
-comments about AWS CodeStar on our forum.
-
-AWS CodeStar User Guide:
-http://docs.aws.amazon.com/codestar/latest/userguide/welcome.html
-
-AWS CodeStar Forum: https://forums.aws.amazon.com/forum.jspa?forumID=248
+* lda.py - > This file builds the model and saves it in the working directory 
+* The data set can be obtained from - http://jmcauley.ucsd.edu/data/amazon/
+* python run_workflow.py "Test data" can be used test and consume the model
+* The remaining folders are helper folders that can be used for data cleaning and pre processing
