@@ -2,11 +2,13 @@ from nltk.tokenize import RegexpTokenizer
 from nltk.corpus import stopwords
 from stop_words import get_stop_words
 from nltk.stem.snowball import SnowballStemmer
+from gensim.models import FastText
 from gensim import corpora, models
 import gensim
 import nltk
 import pandas as pd
 import gzip
+import pickle
 
 
 def parse(path):
@@ -43,6 +45,7 @@ doc_set = [df.reviewText[i] for i in range(num_reviews)]
 
 texts = []
 
+
 for doc in doc_set:
     # putting our three steps together
     tokens = tokenizer.tokenize(doc.lower())
@@ -54,8 +57,9 @@ for doc in doc_set:
     texts.append(stemmed_tokens)
 
 texts_dict = corpora.Dictionary(texts)
-texts_dict.save('auto_review.dict')
-
+texts_dict.save('auto_review_2.dict')
+fast_text_model = FastText(texts, min_count=1)
+pickle.dump(fast_text_model, open('fast_text_model.sav', 'wb'))
 import operator
 print("IDs 1 through 10: {}".format(sorted(texts_dict.token2id.items(),
                                            key=operator.itemgetter(1), reverse=False)[:10]))
@@ -67,4 +71,28 @@ gensim.corpora.MmCorpus.serialize('amzn_auto_review.mm', corpus)
 #
 lda_model = gensim.models.LdaModel(
     corpus, alpha='auto', num_topics=5, id2word=texts_dict, passes=20)
-print lda_model.show_topics(num_topics=5, num_words=5)
+filename = 'finalized_model_2.sav'
+pickle.dump(lda_model, open(filename, 'wb'))
+topics = lda_model.show_topics(num_topics=10, num_words=5)
+labels = []
+
+for topic in topics:
+    print topic
+    values = topic[1].split("+")
+    classlabel = []
+    for value in values:
+        score, word = value.split("*")
+        word = word.replace("\"", "")
+        classlabel.append(word)
+    labels.append(classlabel)
+
+print "**labels**"
+print labels
+label_vec = []
+for label in labels:
+    labelvec = []
+    for word in label:
+        labelvec.append(fast_text_model[word])
+    label_vec.append(labelvec)
+pickle.dump(labels, open('labels.dict', 'wb'))
+pickle.dump(label_vec, open('label_vec.dict', 'wb'))
